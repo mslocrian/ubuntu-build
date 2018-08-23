@@ -1,0 +1,21 @@
+FROM ubuntu:bionic
+LABEL maintainer="Stegen Smith <stegen@owns.com>"
+
+# 
+RUN apt-get update  && apt-get -y install software-properties-common \
+ curl dnsutils git libgeoip-dev  python-pip redis-server tcpdump vim wget
+
+# Get golang
+RUN wget -O /tmp/go1.10.3.tar.gz \
+    https://storage.googleapis.com/golang/go1.10.3.linux-amd64.tar.gz
+RUN mkdir -p /usr/local && cd /usr/local && tar -zxvf /tmp/go1.10.3.tar.gz && \
+    rm /tmp/go1.10.3.tar.gz
+
+# Get HTTPIE
+RUN pip install httpie
+
+# Some cleanup
+RUN rm -rf /var/cache/apt/archives/*
+
+# Hack for tcpdump
+RUN mv /usr/sbin/tcpdump /usr/bin/tcpdump
